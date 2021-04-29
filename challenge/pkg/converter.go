@@ -8,8 +8,12 @@ import (
 )
 
 const (
-	minimumNumber int = 0
-	maximumNumber int = 999999999
+	AsEnglish          rune = 'e'
+	AsRoman            rune = 'r'
+	minimumNumber      int  = 0
+	maximumNumber      int  = 999999999
+	minimumRomanNumber int  = 1
+	maximumRomanNumber int  = 9999
 )
 
 // how many digit's groups to process
@@ -38,16 +42,60 @@ type digitGroup int
 // Since signature of func is int, octal will be converted automatically. 0123 8 == 83 10
 // number is the number that you want to see represented as string representation
 // concatenateWithAnd joins numbers with the string and
-func Converter(number int, concatenateWithAnd bool, selector string) (string, error) {
-	if number < minimumNumber || number > maximumNumber {
-		log.Printf("[pkg.converter.Converter] %d is not a valid input.", number)
-		return "", errors.New("number out of range")
+func Converter(number int, selector rune) (string, error) {
+	switch selector {
+	case AsRoman:
+		if number < minimumRomanNumber || number > maximumRomanNumber {
+			log.Printf("[pkg.converter.Converter] %d is not a valid input for conversor type %c", number,
+				selector)
+			return "", errors.New("number out of range")
+		}
+		return convertToRoman(number)
+	case AsEnglish:
+		if number < minimumNumber || number > maximumNumber {
+			log.Printf("[pkg.converter.Converter] %d is not a valid input.", number)
+			return "", errors.New("number out of range")
+		}
+		return convertToEnglishNumeral(number), nil
 	}
-	return convertToEnglishNumeral(number, concatenateWithAnd), nil
+
+	return "", errors.New("unknown conversor")
+}
+
+// convertToRoman convert a number to roman
+func convertToRoman(number int) (string, error) {
+	var asRoman string
+	conversions := []struct {
+		value int
+		digit string
+	}{
+		{1000, "M"},
+		{900, "CM"},
+		{500, "D"},
+		{400, "CD"},
+		{100, "C"},
+		{90, "XC"},
+		{50, "L"},
+		{40, "XL"},
+		{10, "X"},
+		{9, "IX"},
+		{5, "V"},
+		{4, "IV"},
+		{1, "I"},
+	}
+
+	for _, conversion := range conversions {
+		for number >= conversion.value {
+			asRoman += conversion.digit
+			number -= conversion.value
+		}
+	}
+	return asRoman, nil
 }
 
 // convertToEnglishNumeral Return the english numeral representation of a number as a string
-func convertToEnglishNumeral(number int, useAnd bool) string {
+func convertToEnglishNumeral(number int) string {
+	useAnd := true
 	// Zero rule
 	if number == 0 {
 		return capitalize(_smallNumbers[0])
