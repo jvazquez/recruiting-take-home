@@ -80,19 +80,10 @@ func TestConvertToRomanNumeralTest(t *testing.T) {
 		number int
 		roman  string
 	}{
-		{0, ""},
 		{1, "I"},
-		{2, "II"},
-		{4, "IV"},
-		{5, "V"},
 		{1993, "MCMXCIII"},
-		{2018, "MMXVIII"},
-		{1111, "MCXI"},
-		{2222, "MMCCXXII"},
-		{444, "CDXLIV"},
-		{555, "DLV"},
-		{666, "DCLXVI"},
-		{999, "CMXCIX"},
+		{123, "CXXIII"},
+		{1234, "MCCXXXIV"},
 		{9999, "MMMMMMMMMCMXCIX"},
 	}
 

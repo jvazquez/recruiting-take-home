@@ -19,23 +19,26 @@ const (
 // how many digit's groups to process
 const groupsNumber int = 3
 
-var _smallNumbers = []string{
-	"zero", "one", "two", "three", "four",
-	"five", "six", "seven", "eight", "nine",
-	"ten", "eleven", "twelve", "thirteen", "fourteen",
-	"fifteen", "sixteen", "seventeen", "eighteen", "nineteen",
+// getSmallsNumbers Return an array of strings.
+func getSmallNumbers() []string {
+	return []string{
+		"zero", "one", "two", "three", "four",
+		"five", "six", "seven", "eight", "nine",
+		"ten", "eleven", "twelve", "thirteen", "fourteen",
+		"fifteen", "sixteen", "seventeen", "eighteen", "nineteen",
+	}
 }
 
-var _tens = []string{
-	"", "", "twenty", "thirty", "forty", "fifty",
-	"sixty", "seventy", "eighty", "ninety",
+func getTens() []string {
+	return []string{
+		"", "", "twenty", "thirty", "forty", "fifty",
+		"sixty", "seventy", "eighty", "ninety",
+	}
 }
 
-var _scaleNumbers = []string{
-	"", "thousand", "million",
+func getScaleNumbers() []string {
+	return []string{"", "thousand", "million"}
 }
-
-type digitGroup int
 
 // Converter will take an int and will provide the value the english numeral as a string.
 // If there is an error, the output tuple will contain an error.
@@ -98,16 +101,16 @@ func convertToEnglishNumeral(number int) string {
 	useAnd := true
 	// Zero rule
 	if number == 0 {
-		return capitalize(_smallNumbers[0])
+		return capitalize(getSmallNumbers()[0])
 	}
 
 	// Divide into three-digits group
-	var groups [groupsNumber]digitGroup
+	var groups [groupsNumber]int
 	positive := math.Abs(float64(number))
 
 	// Form four-digit groups
 	for i := 0; i < groupsNumber; i++ {
-		groups[i] = digitGroup(math.Mod(positive, 1000))
+		groups[i] = int(math.Mod(positive, 1000))
 		positive /= 1000
 	}
 
@@ -120,7 +123,7 @@ func convertToEnglishNumeral(number int) string {
 
 	for i := 1; i < groupsNumber; i++ {
 		if groups[i] != 0 {
-			prefix := textGroup[i] + " " + _scaleNumbers[i]
+			prefix := textGroup[i] + " " + getScaleNumbers()[i]
 
 			if len(combined) != 0 {
 				prefix += separator(and)
@@ -141,12 +144,12 @@ func intMod(x, y int) int {
 }
 
 // digitGroupToText Converts a group of integers to the string representation
-func digitGroupToText(group digitGroup, useAnd bool) (ret string) {
+func digitGroupToText(group int, useAnd bool) (ret string) {
 	hundreds := group / 100
-	tensUnits := intMod(int(group), 100)
+	tensUnits := intMod(group, 100)
 
 	if hundreds != 0 {
-		ret += _smallNumbers[hundreds] + " hundred"
+		ret += getSmallNumbers()[hundreds] + " hundred"
 
 		if tensUnits != 0 {
 			ret += separator(useAnd)
@@ -157,13 +160,13 @@ func digitGroupToText(group digitGroup, useAnd bool) (ret string) {
 	units := intMod(tensUnits, 10)
 
 	if tens >= 2 {
-		ret += _tens[tens]
+		ret += getTens()[tens]
 
 		if units != 0 {
-			ret += "-" + _smallNumbers[units]
+			ret += "-" + getSmallNumbers()[units]
 		}
 	} else if tensUnits != 0 {
-		ret += _smallNumbers[tensUnits]
+		ret += getSmallNumbers()[tensUnits]
 	}
 
 	return
