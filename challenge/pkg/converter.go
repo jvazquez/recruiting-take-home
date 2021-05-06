@@ -119,7 +119,7 @@ func convertToEnglishNumeral(number int) string {
 		textGroup[i] = digitGroupToText(groups[i], useAnd)
 	}
 	combined := textGroup[0]
-	and := useAnd && (groups[0] > 0 && groups[0] < 100)
+	and := groups[0] > 0 && groups[0] < 100
 
 	for i := 1; i < groupsNumber; i++ {
 		if groups[i] != 0 {

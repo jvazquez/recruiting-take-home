@@ -37,9 +37,9 @@ For example, you can envision a function accepting an int and returning a string
 | 85000 | Eighty-five thousand | 
 
 The following are the guard rails:  
-* Minimum number is 0
-* Maximum number is 999,999,999
-* If a number group is in the range 21 to 99, and the second digit is not zero, the number is typically written as two words separated by a hyphen.
+* Minimum userInput is 0
+* Maximum userInput is 999,999,999
+* If a userInput group is in the range 21 to 99, and the second digit is not zero, the userInput is typically written as two words separated by a hyphen.
 
 ### Part 2
 Let's extend on our previous solution with something fun! In addition to supporting english, it's easy to envision that we could support other languages.
@@ -47,6 +47,6 @@ Extend your solution such that we can also provide a selector to choose the lang
 [Roman Numerals](https://en.wikipedia.org/wiki/Roman_numerals).
 
 The following are the guard rails:
-* Minimum number is 1
-* Maximum number is 9999
+* Minimum userInput is 1
+* Maximum userInput is 9999
 * No spacing required 
